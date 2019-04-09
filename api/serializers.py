@@ -2,23 +2,13 @@
 
 from rest_framework import serializers
 
-from api.models import User, UserProfile
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    """
-    Profile serializer
-    """
-    class Meta:
-        model = UserProfile
-        fields = ('title', )
+from api.models import User, Customer
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     User serializer for validate user creation or update
     """
-    profile = UserProfileSerializer(required=True)
 
     class Meta:
         model = User
@@ -31,12 +21,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         :param validated_data:
         :return:
         """
-        profile_data = validated_data.pop('profile')
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
         user.save()
-        UserProfile.objects.create(user=user, **profile_data)
         return user
 
     def update(self, instance, validated_data):
@@ -45,13 +33,39 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         :param validated_data:
         :return:
         """
-        profile_data = validated_data.pop('profile')
-        profile = instance.profile
-
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        profile.title = profile_data.get('title', profile.title)
-        profile.save()
+        return instance
+
+
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    User serializer for validate user creation or update
+    """
+
+    class Meta:
+        model = Customer
+        fields = ('url', 'company_title', 'tax_office', 'tax_number')
+
+    def create(self, validated_data):
+        """
+        Create company and additional info
+        :param validated_data:
+        :return:
+        """
+        customer = Customer(**validated_data)
+        customer.save()
+        return customer
+
+    def update(self, instance, validated_data):
+        """
+        Upadate company and it's additional info
+        :param validated_data:
+        :return:
+        """
+
+        instance.lead = validated_data.get('lead', instance.lead)
+        instance.save()
 
         return instance
