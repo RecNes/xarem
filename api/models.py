@@ -32,10 +32,11 @@ class Customer(models.Model):
         (0, _("Mobile")), (1, _("Work")), (2, _("Fax")), (3, _("Home"))
     )
 
+    name = models.CharField(max_length=256, verbose_name=_("Name"))
     company_title = models.CharField(max_length=256, verbose_name=_("Company Title"))
     email = models.EmailField(verbose_name=_("E-mail"))
     phone = models.CharField(max_length=10, validators=[MinLengthValidator(10)],
-                             help_text="5xxxxxxxxx", verbose_name="Phone Nr")
+                             help_text="5xxxxxxxxx", verbose_name=_("Phone Nr"))
     lead = models.BooleanField(verbose_name=_("Lead"), default=False)
 
     def phone_number(self):

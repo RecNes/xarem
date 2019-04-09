@@ -46,7 +46,7 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('url', 'company_title', 'tax_office', 'tax_number')
+        fields = ('url', 'name', 'company_title', 'email', 'phone')
 
     def create(self, validated_data):
         """
@@ -66,6 +66,10 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         :return:
         """
         instance.lead = validated_data.get('lead', instance.lead)
+        instance.name = validated_data.get('name', instance.lead)
+        instance.company_title = validated_data.get('company_title', instance.lead)
+        instance.email = validated_data.get('email', instance.lead)
+        instance.phone = validated_data.get('phone', instance.lead)
         instance.save()
 
         return instance
