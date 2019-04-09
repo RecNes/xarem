@@ -41,7 +41,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     """
-    User serializer for validate user creation or update
+    Serializer for validate Customer creation or update
     """
 
     class Meta:
@@ -54,6 +54,7 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         :param validated_data:
         :return:
         """
+        validated_data.update({'lead': True})
         customer = Customer(**validated_data)
         customer.save()
         return customer
@@ -64,7 +65,6 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         :param validated_data:
         :return:
         """
-
         instance.lead = validated_data.get('lead', instance.lead)
         instance.save()
 
