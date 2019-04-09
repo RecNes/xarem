@@ -3,7 +3,6 @@ import json
 
 import jwt
 from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework import viewsets, views, exceptions
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -12,12 +11,6 @@ from rest_framework.response import Response
 from api.models import User, Customer
 from api.permissions import IsLoggedInUserOrAdmin
 from api.serializers import CustomerSerializer, UserSerializer
-
-
-def start_page(request, title="Simple Django RESTFull App"):
-    """Home page view"""
-    content = {'title': title}
-    return render(request, 'index.html', content)
 
 
 class UserViewSet(viewsets.ModelViewSet):
